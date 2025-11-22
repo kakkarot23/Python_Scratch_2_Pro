@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Why Learn Python?</title>
+
+<style>
+/* ---------- BASIC STYLE ---------- */
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --accent:#6ee7b7;
+  --muted:#9aa4b2;
+  --glass: rgba(255,255,255,0.03);
+  --radius:12px;
+  --gap:18px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  background:linear-gradient(180deg,#071225 0%, #0f1724 100%);
+  color:#e6eef6;
+}
+
+.container{
+  max-width:980px;
+  margin:36px auto;
+  padding:28px;
+}
+
+/* ---------- HEADER ---------- */
+.hero{
+  text-align:center;
+  padding:28px;
+  background:var(--glass);
+  border-radius:var(--radius);
+  backdrop-filter: blur(6px);
+  box-shadow:0 6px 24px rgba(2,6,23,0.6);
+}
+
+h1{
+  margin:0;
+  font-size:2.2rem;
+  letter-spacing:-0.5px;
+}
+
+.accent{
+  color:var(--accent);
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-top:8px;
+}
+
+/* ---------- BUTTON ---------- */
+.btn{
+  margin-top:18px;
+  padding:10px 18px;
+  border-radius:10px;
+  border:0;
+  background:linear-gradient(90deg,var(--accent), #34d399);
+  color:#07203a;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(52,211,153,0.14);
+}
+.btn:active{transform:translateY(1px)}
+
+/* ---------- CARDS ---------- */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:var(--gap);
+  margin-top:22px;
+}
+
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:16px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03);
+  min-height:110px;
+}
+
+.card h2{
+  margin:0 0 8px 0;
+  font-size:1.05rem;
+}
+
+.card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.hidden{display:none}
+
+/* ---------- CTA ---------- */
+.cta{
+  text-align:center;
+  margin-top:20px;
+  color:var(--muted);
+}
+
+.cta a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+  text-align:center;
+  margin-top:26px;
+  color:rgba(230,238,246,0.6);
+  font-size:0.9rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:520px){
+  h1{font-size:1.6rem}
+  .container{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+
+  <header class="hero">
+    <h1>Why Learn <span class="accent">Python</span>?</h1>
+    <p class="subtitle">Simple, powerful, and used everywhere — perfect for beginners to pros.</p>
+    <button id="learnMoreBtn" class="btn">Show Benefits</button>
+  </header>
+
+  <section id="benefits" class="cards hidden" aria-live="polite">
+      <article class="card">
+        <h2>Easy to Learn</h2>
+        <p>Python has clear, readable syntax — perfect for beginners.</p>
+      </article>
+
+      <article class="card">
+        <h2>Huge Ecosystem</h2>
+        <p>Libraries for web, data, ML, automation, cybersecurity, and more.</p>
+      </article>
+
+      <article class="card">
+        <h2>High Demand</h2>
+        <p>Python developers are needed in every industry worldwide.</p>
+      </article>
+
+      <article class="card">
+        <h2>Strong Career Options</h2>
+        <p>Data Science, ML, Web Dev, Automation, IoT, Cloud — all use Python.</p>
+      </article>
+
+      <article class="card">
+        <h2>Fast Development</h2>
+        <p>Create prototypes and real apps with fewer lines of code.</p>
+      </article>
+
+      <article class="card">
+        <h2>Huge Community</h2>
+        <p>Tons of tutorials, libraries, events, and open-source support.</p>
+      </article>
+  </section>
+
+  <section class="cta">
+    <p>Want a quick guide? <a id="downloadBtn" href="#">Download notes</a></p>
+  </section>
+
+  <footer class="footer">
+    <small>Made with ♥ | Free to use</small>
+  </footer>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  const learnBtn = document.getElementById('learnMoreBtn');
+  const benefits = document.getElementById('benefits');
+  const downloadBtn = document.getElementById('downloadBtn');
+
+  /* Show/Hide cards */
+  learnBtn.addEventListener('click', () => {
+    const isHidden = benefits.classList.toggle('hidden');
+    learnBtn.textContent = isHidden ? 'Show Benefits' : 'Hide Benefits';
+  });
+
+  /* Download simple notes file */
+  downloadBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const text = 
+`WHY LEARN PYTHON?
+
+• Easy to learn
+• Huge ecosystem (web, data, AI, ML, automation)
+• High global demand
+• Excellent salaries
+• Used in all industries
+• Strong community support
+
+Start with fundamentals → pick a specialization → build projects.`;
+
+    const blob = new Blob([text], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "why-learn-python.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+});
+</script>
+
+</body>
+</html>
