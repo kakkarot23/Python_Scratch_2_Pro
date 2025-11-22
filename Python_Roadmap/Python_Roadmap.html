@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Python Learning Roadmap — Interactive</title>
+<meta name="description" content="Single-file interactive Python learning roadmap: beginner to pro, specializations, projects, jobs, and progress tracker." />
+<style>
+  /* ====== BASIC THEME ====== */
+  :root{
+    --bg:#0f1724; --panel:#071427; --muted:#9aa4b2; --card:#0b1220;
+    --accent:#6ee7b7; --accent-2:#34d399; --glass: rgba(255,255,255,0.03);
+    --radius:12px; --gap:16px; --fw: 15px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#071225 0%, #0f1724 100%);color:#e6eef6}
+  .wrap{max-width:1100px;margin:28px auto;padding:20px}
+  header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  header h1{margin:0;font-size:1.6rem}
+  .subtitle{color:var(--muted);font-size:0.92rem;margin-top:6px}
+
+  /* ============ LAYOUT ============ */
+  .grid{display:grid;grid-template-columns: 1fr 360px;gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+  /* ============ LEFT PANEL ============ */
+  .panel{background:var(--panel);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:0;padding:8px 12px;border-radius:10px;color:#07203a;font-weight:700;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(110,231,183,0.12)}
+  .search{flex:1;display:flex;align-items:center;gap:8px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02)}
+  .search input{background:transparent;border:0;outline:none;color:inherit;width:100%}
+
+  /* ============ TIMELINE LIST ============ */
+  .stage{margin-bottom:14px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);}
+  .stage h3{margin:0;display:flex;justify-content:space-between;align-items:center;font-size:1.05rem}
+  .meta{color:var(--muted);font-size:0.88rem;margin-top:6px}
+  .topics{margin-top:10px;display:grid;gap:8px}
+  .topic{display:flex;align-items:flex-start;gap:10px;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03)}
+  .topic input[type="checkbox"]{width:18px;height:18px;margin-top:2px}
+  .topic .tname{font-weight:600}
+  .topic .tdesc{color:var(--muted);font-size:0.9rem}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);font-size:0.85rem;color:var(--muted)}
+
+  /* ============ RIGHT PANEL ============ */
+  .side{position:sticky;top:20px}
+  .card{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);margin-bottom:12px}
+  .progress-wrap{display:flex;align-items:center;gap:12px}
+  .progress{flex:1;height:12px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+  .progress > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+  .stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .stat{flex:1;min-width:100px;padding:8px;border-radius:8px;background:rgba(0,0,0,0.04);text-align:center}
+  .stat h4{margin:0;font-size:0.95rem}
+  .stat p{margin:4px 0 0 0;color:var(--muted);font-size:0.85rem}
+
+  /* ============ JOBS & SALARY ============ */
+  .job{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border-radius:8px;background:rgba(0,0,0,0.03)}
+  .job h4{margin:0;font-size:0.95rem}
+  .salary{color:var(--muted);font-size:0.9rem}
+
+  /* ============ SPECIALIZATIONS ============ */
+  .specs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (max-width:520px){ .specs{grid-template-columns:1fr} }
+
+  /* ============ FOOTER / EXPORT ============ */
+  .export{display:flex;gap:8px;flex-wrap:wrap}
+  .small{font-size:0.85rem;color:var(--muted)}
+
+  /* ============ SEARCH HIGHLIGHT ============ */
+  mark{background:rgba(110,231,183,0.14);color:var(--accent);padding:0 3px;border-radius:3px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Python Learning Roadmap</h1>
+        <div class="subtitle">Interactive guide: Beginner → Pro • Tracks • Projects • Jobs • Progress tracker</div>
+      </div>
+      <div style="margin-left:auto">
+        <button class="btn" id="resetBtn" title="Reset all checkboxes">Reset Progress</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Roadmap -->
+      <div class="panel" aria-live="polite">
+        <div class="controls">
+          <div class="search" title="Search topics">
+            🔎 <input id="searchInput" placeholder="Search topics, e.g., pandas, Django, OOP..." />
+          </div>
+          <button class="btn ghost" id="filterBtn">Filter: All</button>
+          <button class="btn ghost" id="exportMd">Export .md</button>
+          <button class="btn ghost" id="exportJson">Export JSON</button>
+        </div>
+
+        <!-- Roadmap Stages: We'll generate via JS -->
+        <div id="roadmap"></div>
+
+        <div style="margin-top:14px" class="small">Tip: Click checkboxes to mark topics done. Use Export to save progress.</div>
+      </div>
+
+      <!-- RIGHT: Side -->
+      <aside class="side">
+        <div class="card">
+          <h3 style="margin:0">Progress</h3>
+          <div class="progress-wrap">
+            <div class="progress" aria-hidden="true"><div id="progressBar"></div></div>
+            <div id="progressPct">0%</div>
+          </div>
+          <div class="stats">
+            <div class="stat"><h4 id="totalTopics">0</h4><p class="small">Total Topics</p></div>
+            <div class="stat"><h4 id="doneTopics">0</h4><p class="small">Completed</p></div>
+            <div class="stat"><h4 id="remainingTopics">0</h4><p class="small">Remaining</p></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0">Specializations</h3>
+          <div class="specs" id="specList">
+            <!-- generated -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0">Project Ideas</h3>
+          <div style="margin-top:8px" id="projectList">
+            <!-- generated -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0">Jobs & Salary (India / Global)</h3>
+          <div style="margin-top:10px">
+            <div class="job"><h4>Python Developer</h4><div class="salary">₹3.5–12 L / $60k–140k</div></div>
+            <div class="job"><h4>Data Scientist</h4><div class="salary">₹7–28 L / $100k–200k</div></div>
+            <div class="job"><h4>ML Engineer</h4><div class="salary">₹8–32 L / $120k–220k</div></div>
+            <div class="job"><h4>Backend / DevOps</h4><div class="salary">₹5–20 L / $80k–170k</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0">Quick Tips</h3>
+          <ul style="margin:10px 0 0 18px;color:var(--muted);line-height:1.45">
+            <li>Practice daily (30–60 mins)</li>
+            <li>Build real projects & push to GitHub</li>
+            <li>Learn fundamentals deeply (DSA, OOP, Web basics)</li>
+            <li>Choose 1 specialization and portfolio projects</li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* ====== ROADMAP DATA ====== */
+const ROADMAP = [
+  {
+    id: 'beginner',
+    title: 'Beginner (0–2 months)',
+    meta: 'Fundamentals & basic projects',
+    topics: [
+      {id:'py-install', name:'Install Python & Setup', desc:'Python 3.x, VSCode/PyCharm, pip, venv'},
+      {id:'py-syntax', name:'Syntax & Hello World', desc:'Variables, expressions, printing'},
+      {id:'py-basics', name:'Data Types & Variables', desc:'int, float, str, bool, None'},
+      {id:'py-control', name:'Control Flow', desc:'if, else, elif, ternary'},
+      {id:'py-loops', name:'Loops', desc:'for, while, break, continue'},
+      {id:'py-func', name:'Functions', desc:'def, return, args, kwargs'},
+      {id:'py-collections', name:'Lists, Tuples, Dicts, Sets', desc:'Basic operations & comprehension'},
+      {id:'py-files', name:'File I/O', desc:'open, read, write, CSV basics'},
+      {id:'py-errors', name:'Error Handling', desc:'try, except, finally, raising errors'},
+      {id:'git-basics', name:'Git & GitHub Basics', desc:'init, commit, push, branches'},
+    ]
+  },
+  {
+    id: 'intermediate',
+    title: 'Intermediate (2–4 months)',
+    meta: 'OOP, data handling, modules',
+    topics: [
+      {id:'oop', name:'Object-Oriented Programming', desc:'Classes, objects, inheritance, encapsulation'},
+      {id:'modules', name:'Modules & Packages', desc:'import, pip, virtualenv'},
+      {id:'decorators', name:'Decorators & Context Managers', desc:'@decorator, with, __enter__'},
+      {id:'generators', name:'Generators & Iterators', desc:'yield, __iter__'},
+      {id:'regex', name:'Regular Expressions', desc:'re module for pattern matching'},
+      {id:'json', name:'JSON & Serialization', desc:'json, pickle'},
+      {id:'db-sql', name:'Databases & SQL', desc:'SQLite/Postgres basics, ORM concept'},
+      {id:'http', name:'APIs & Requests', desc:'requests library, REST basics'},
+      {id:'testing', name:'Unit Testing', desc:'pytest, unittest basics'},
+      {id:'logging', name:'Logging & Debugging', desc:'logging module, pdb'},
+    ]
+  },
+  {
+    id: 'advanced',
+    title: 'Advanced (4–8 months)',
+    meta: 'Concurrency, performance, design',
+    topics: [
+      {id:'concurrency', name:'Concurrency & AsyncIO', desc:'threading, multiprocessing, asyncio'},
+      {id:'design', name:'Design Patterns', desc:'Factory, Singleton, Strategy, Observer'},
+      {id:'perf', name:'Performance & Profiling', desc:'timeit, cProfile, memory_profiler'},
+      {id:'deploy', name:'Packaging & Deployment', desc:'wheel, pip, Docker, CI/CD'},
+      {id:'security', name:'Security Basics', desc:'input validation, secrets, hashing'},
+      {id:'scalability', name:'System Design Basics', desc:'scaling APIs, caching, queues'},
+      {id:'advanced-testing', name:'Integration Testing', desc:'end-to-end tests, mocks'},
+      {id:'type-hints', name:'Type Hints & MyPy', desc:'typing module annotations'},
+    ]
+  },
+  {
+    id: 'specialize',
+    title: 'Specializations (choose 1–3)',
+    meta: 'Pick tracks and build focused projects',
+    topics: [
+      {id:'web', name:'Web Development', desc:'Django, Flask, FastAPI, REST, Auth, ORM'},
+      {id:'data', name:'Data Science', desc:'NumPy, Pandas, Matplotlib, EDA'},
+      {id:'ml', name:'Machine Learning', desc:'Scikit-learn, TensorFlow, PyTorch, model deployment'},
+      {id:'automation', name:'Automation & Scripting', desc:'Selenium, BeautifulSoup, scripting workflows'},
+      {id:'devops', name:'DevOps & Cloud', desc:'Docker, Kubernetes, AWS/GCP basics'},
+      {id:'securityTrack', name:'Cybersecurity', desc:'pen-testing scripts, network scanning, automation'},
+      {id:'quant', name:'Finance & Quant', desc:'Pandas, time-series, algotrading basics'},
+    ]
+  },
+  {
+    id: 'pro',
+    title: 'Pro / Production (9+ months)',
+    meta: 'Build portfolio, lead projects, optimize and mentor',
+    topics: [
+      {id:'system', name:'Architecture & System Design', desc:'microservices, event-driven systems'},
+      {id:'mlops', name:'MLOps & Model Ops', desc:'CI/CD for models, monitoring, A/B testing'},
+      {id:'security-adv', name:'Advanced Security & Compliance', desc:'data protection, SAST/DAST'},
+      {id:'scale-ops', name:'SRE & Observability', desc:'prometheus, logging, tracing'},
+      {id:'lead', name:'Technical Leadership', desc:'code reviews, mentoring, design docs'},
+      {id:'oss', name:'Open Source Contribution', desc:'contribute to libs, maintainers best practices'},
+    ]
+  }
+];
+
+/* ====== PROJECT SUGGESTIONS ====== */
+const PROJECTS = {
+  beginner: [
+    'Simple CLI Calculator',
+    'To-Do App (local file)',
+    'Number Guessing Game',
+    'Basic Web Scraper (requests + bs4)'
+  ],
+  intermediate: [
+    'Personal Blog with Flask',
+    'Notes App with DB and Auth',
+    'Data Analysis notebook (Pandas)',
+    'REST API and simple frontend'
+  ],
+  advanced: [
+    'Recommendation Engine',
+    'Real-time chat app (WebSockets)',
+    'Production-ready Django app with CI/CD',
+    'End-to-end ML pipeline'
+  ],
+  pro: [
+    'Deploy scalable microservices',
+    'ML system with monitoring & retraining',
+    'Contribute to an open-source library',
+    'Lead a small engineering team project'
+  ]
+};
+
+/* ====== SPECIALIZATIONS DATA ====== */
+const SPECS = [
+  {key:'web', title:'Web Dev', desc:'Django / Flask / FastAPI — backend, REST, auth, templating'},
+  {key:'data', title:'Data Science', desc:'Pandas / NumPy / Viz — EDA, reporting, dashboards'},
+  {key:'ml', title:'Machine Learning', desc:'Scikit-learn / TF / PyTorch — training, eval, deployment'},
+  {key:'automation', title:'Automation', desc:'Scripting, scraping, RPA, Selenium'},
+  {key:'devops', title:'DevOps', desc:'Docker, CI/CD, cloud basics'},
+  {key:'securityTrack', title:'Security', desc:'Security automation, scanning, scripting'},
+  {key:'quant', title:'Finance', desc:'Time-series, trading, quant analysis'}
+];
+
+/* ====== STATE ====== */
+let state = {
+  done: new Set(),
+  filter: 'all',
+  search: ''
+};
+
+/* ====== UTILITIES ====== */
+const el = (sel) => document.querySelector(sel);
+const create = (tag, attrs={}, ...children) => {
+  const n = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v]) => {
+    if(k === 'class') n.className = v;
+    else if(k === 'html') n.innerHTML = v;
+    else n.setAttribute(k,v);
+  });
+  children.forEach(c => { if(typeof c === 'string') n.appendChild(document.createTextNode(c)); else if(c) n.appendChild(c); });
+  return n;
+};
+
+/* ====== RENDER ROADMAP ====== */
+function renderRoadmap(){
+  const container = el('#roadmap');
+  container.innerHTML = '';
+
+  ROADMAP.forEach(stage => {
+    const stageEl = create('div',{class:'stage', id: stage.id});
+    const h = create('h3', {}, create('span',{},stage.title), create('small',{class:'small'}, stage.meta));
+    stageEl.appendChild(h);
+
+    const chips = create('div',{class:'chips'});
+    stage.topics.slice(0,4).forEach(t => {
+      chips.appendChild(create('div',{class:'chip'}, t.name));
+    });
+    stageEl.appendChild(chips);
+
+    const topics = create('div',{class:'topics'});
+    stage.topics.forEach(topic => {
+      // filter & search logic
+      if(!matchesFilter(topic)) return;
+      const t = create('label',{class:'topic'});
+      const cb = create('input',{type:'checkbox',id:topic.id});
+      cb.checked = state.done.has(topic.id);
+      cb.addEventListener('change', (e) => {
+        if(e.target.checked) state.done.add(topic.id); else state.done.delete(topic.id);
+        saveState();
+        updateProgress();
+      });
+
+      const info = create('div',{style:'flex:1'});
+      const tname = create('div',{class:'tname'}, topic.name);
+      const tdesc = create('div',{class:'tdesc'}, topic.desc);
+      info.appendChild(tname); info.appendChild(tdesc);
+
+      const badge = create('div',{class:'small', style:'color:var(--muted);margin-left:8px'}, '');
+      t.appendChild(cb); t.appendChild(info); t.appendChild(badge);
+      topics.appendChild(t);
+    });
+
+    stageEl.appendChild(topics);
+    container.appendChild(stageEl);
+  });
+}
+
+/* ====== FILTER & SEARCH ====== */
+function matchesFilter(topic){
+  // filter by specialization: if state.filter is 'all' allow all
+  if(state.filter === 'all') {
+    // search check
+    return matchesSearch(topic);
+  }
+  // else allow topics that name/desc includes filter keyword or topic id matches
+  if(topic.id && topic.id.toLowerCase().includes(state.filter)) return matchesSearch(topic);
+  if(topic.name && topic.name.toLowerCase().includes(state.filter)) return matchesSearch(topic);
+  if(topic.desc && topic.desc.toLowerCase().includes(state.filter)) return matchesSearch(topic);
+  return false;
+}
+function matchesSearch(topic){
+  if(!state.search) return true;
+  const q = state.search.toLowerCase();
+  return (topic.name && topic.name.toLowerCase().includes(q)) ||
+         (topic.desc && topic.desc.toLowerCase().includes(q)) ||
+         (topic.id && topic.id.toLowerCase().includes(q));
+}
+
+/* ====== PROGRESS CALC ====== */
+function updateProgress(){
+  const allTopics = ROADMAP.flatMap(s => s.topics);
+  const total = allTopics.length;
+  const done = state.done.size;
+  const pct = total === 0 ? 0 : Math.round((done/total)*100);
+  el('#progressBar').style.width = pct + '%';
+  el('#progressPct').textContent = pct + '%';
+  el('#totalTopics').textContent = total;
+  el('#doneTopics').textContent = done;
+  el('#remainingTopics').textContent = total - done;
+}
+
+/* ====== EXPORT ====== */
+function exportJSON(){
+  const payload = {
+    timestamp: new Date().toISOString(),
+    done: Array.from(state.done),
+    filter: state.filter,
+    search: state.search
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'python-roadmap-progress.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function exportMD(){
+  const lines = [];
+  lines.push('# Python Learning Roadmap — Progress Export');
+  lines.push('');
+  lines.push(`Exported: ${new Date().toLocaleString()}`);
+  lines.push('');
+  ROADMAP.forEach(stage => {
+    lines.push(`## ${stage.title} — ${stage.meta}`);
+    stage.topics.forEach(t => {
+      const doneMark = state.done.has(t.id) ? '[x]' : '[ ]';
+      lines.push(`- ${doneMark} **${t.name}** — ${t.desc}`);
+    });
+    lines.push('');
+  });
+  const blob = new Blob([lines.join('\n')], {type:'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'python-roadmap-progress.md'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ====== PERSISTENCE ====== */
+function saveState(){ localStorage.setItem('pyRoadmap_v1', JSON.stringify({done:Array.from(state.done), filter:state.filter, search:state.search})); }
+function loadState(){
+  try{
+    const raw = localStorage.getItem('pyRoadmap_v1');
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    state.done = new Set(parsed.done || []);
+    state.filter = parsed.filter || 'all';
+    state.search = parsed.search || '';
+  }catch(e){ console.warn('Failed to load state', e); }
+}
+
+/* ====== RESET ====== */
+function resetProgress(){
+  if(!confirm('Reset all progress?')) return;
+  state.done.clear();
+  state.filter = 'all';
+  state.search = '';
+  saveState();
+  renderAll();
+}
+
+/* ====== RENDER SPECS & PROJECTS ====== */
+function renderSpecs(){
+  const elSpec = document.getElementById('specList');
+  elSpec.innerHTML = '';
+  SPECS.forEach(s => {
+    const card = create('div',{class:'chip', title:s.desc}, create('strong',{}, s.title), create('div', {class:'small', style:'margin-left:6px;display:inline;color:var(--muted)'}, ' — ' + s.desc));
+    card.addEventListener('click', ()=> {
+      state.filter = s.key;
+      el('#filterBtn').textContent = 'Filter: ' + s.title;
+      renderRoadmap();
+      updateProgress();
+    });
+    elSpec.appendChild(card);
+  });
+}
+
+function renderProjects(){
+  const elProjects = el('#projectList');
+  elProjects.innerHTML = '';
+  Object.entries(PROJECTS).forEach(([k, arr]) => {
+    const hdr = create('div',{class:'small', style:'font-weight:700;margin-top:8px'}, k.toUpperCase());
+    elProjects.appendChild(hdr);
+    arr.forEach(p => {
+      elProjects.appendChild(create('div',{class:'small', style:'color:var(--muted);margin-left:8px'}, '• ' + p));
+    });
+  });
+}
+
+/* ====== SEARCH HANDLERS ====== */
+const searchInput = el('#searchInput');
+searchInput.addEventListener('input', (e) => {
+  state.search = e.target.value.trim();
+  saveState();
+  renderRoadmap();
+  updateProgress();
+});
+
+/* ====== BUTTONS ====== */
+el('#filterBtn').addEventListener('click', () => {
+  // toggle filter between 'all' and 'web' for convenience
+  if(state.filter === 'all'){ state.filter = 'web'; el('#filterBtn').textContent = 'Filter: Web'; }
+  else { state.filter = 'all'; el('#filterBtn').textContent = 'Filter: All'; }
+  saveState();
+  renderRoadmap();
+  updateProgress();
+});
+el('#resetBtn').addEventListener('click', resetProgress);
+el('#exportJson').addEventListener('click', exportJSON);
+el('#exportMd').addEventListener('click', exportMD);
+
+/* ====== INIT ====== */
+function renderAll(){
+  renderRoadmap();
+  renderSpecs();
+  renderProjects();
+  updateProgress();
+  // set UI values
+  searchInput.value = state.search;
+  el('#filterBtn').textContent = state.filter === 'all' ? 'Filter: All' : 'Filter: ' + state.filter;
+}
+loadState();
+renderAll();
+
+/* ====== OPTIONAL: Keyboard shortcuts ====== */
+document.addEventListener('keydown', (e) => {
+  if(e.ctrlKey && e.key === 'e'){ exportMD(); }
+  if(e.ctrlKey && e.key === 's'){ exportJSON(); e.preventDefault(); }
+  if(e.key === 'Escape'){ state.search=''; searchInput.value=''; renderRoadmap(); updateProgress(); }
+});
+</script>
+</body>
+</html>
